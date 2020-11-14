@@ -134,6 +134,7 @@ dmypy.json
 
 # for dataset
 *_Datasets/
+*dataset/
 
 # for image file
 *.png
