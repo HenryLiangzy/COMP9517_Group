@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# for the continue cnn operation
 class DoubleConv(nn.Module):
     """(convolution => [BN] => ReLU) * 2"""
 
@@ -19,6 +20,8 @@ class DoubleConv(nn.Module):
     def forward(self, x):
         return self.double_conv(x)
 
+
+# for Down sampling operation
 class Down(nn.Module):
     """Downscaling with maxpool then double conv"""
 
@@ -32,6 +35,8 @@ class Down(nn.Module):
     def forward(self, x):
         return self.maxpool_conv(x)
 
+
+# for the up sampling
 class Up(nn.Module):
     """Upscaling then double conv"""
 
@@ -57,6 +62,15 @@ class Up(nn.Module):
 
         x = torch.cat([x2, x1], dim=1)
         return self.conv(x)
+
+
+class FeatureConcat(nn.Module):
+
+    def __init__(self, in_channels, out_channels):
+        super().__init__()
+
+    def forward(self, x1, x2):
+        pass
 
 
 class OutConv(nn.Module):

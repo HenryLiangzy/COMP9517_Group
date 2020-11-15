@@ -34,29 +34,35 @@ def main(args):
     train_list, test_list = train_test_split(file_rgb, test_size=args.rate, random_state=0)
 
     # load the image to corresponding folder
+    size = args.size
     for file_name in train_list:
         img = cv2.imread(dataset_path+file_name+'_rgb.png')
+        img = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
         cv2.imwrite(output_path+'/'+'train/'+file_name+'_rgb.png', img)
 
         img = cv2.imread(dataset_path+file_name+'_label.png')
+        img = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
         cv2.imwrite(output_path+'/'+'train/'+file_name+'_label.png', img)
-        print('Finish writing:', file_name)
+        print('Train writing:', file_name)
 
     for file_name in test_list:
         img = cv2.imread(dataset_path+file_name+'_rgb.png')
+        img = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
         cv2.imwrite(output_path+'/'+'test/'+file_name+'_rgb.png', img)
 
         img = cv2.imread(dataset_path+file_name+'_label.png')
+        img = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
         cv2.imwrite(output_path+'/'+'test/'+file_name+'_label.png', img)
-        print('Finish writing:', file_name)
+        print('Test writing:', file_name)
     
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--format', type=int, required=True, help='Output Image formate: 0 for Gray Scale image, 1 for RGB image', default=0)
+    parser.add_argument('-f', '--format', type=int, required=False, help='Output Image formate: 0 for Gray Scale image, 1 for RGB image', default=0)
     parser.add_argument('-d', '--dataset', type=str, required=True, help='Input dataset path for pre-processing')
     parser.add_argument('-o', '--output_path', type=str, required=False, help='Output dataset path', default='dataset/')
     parser.add_argument('-r', '--rate', type=float, required=False, help='the split rate of the train set and test set', default=0.3)
+    parser.add_argument('-s', '--size', type=int, required=False, help='Resize the image', default=256)
 
     args = parser.parse_args()
     main(args)
