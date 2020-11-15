@@ -3,8 +3,9 @@ from dataloader import Data_Loader
 from torch import optim
 import torch.nn as nn
 import torch
+import argparse
 
-def train_net(net, device, data_path, epochs=40, batch_size=1, lr=0.00001):
+def train_net(net, device, data_path, epochs, batch_size, lr):
 
     # load the dataset
     cvppp_dataset = Data_Loader(data_path)
@@ -14,7 +15,7 @@ def train_net(net, device, data_path, epochs=40, batch_size=1, lr=0.00001):
 
     # define RMSprop/Adam
     optimizer = optim.RMSprop(net.parameters(), lr=lr, weight_decay=1e-8, momentum=0.9)
-
+    # optimizer = optim.toptim.Adam(net.parameters(), lr=0.01)
 
     # define Loss function
     criterion = nn.BCEWithLogitsLoss()
@@ -56,6 +57,15 @@ def train_net(net, device, data_path, epochs=40, batch_size=1, lr=0.00001):
 
 # Train here
 if __name__ == "__main__":
+    
+    # user figure
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--dataset', type=str, required=True, help='Input dataset path')
+    parser.add_argument('-e', '--epoch', type=int, required=False, help='Epoch time', default=10)
+    parser.add_argument('-b', '--batch_size', type=int, required=False, help='Batch size of training set', default=2)
+    parser.add_argument('-l', '--lr', type=float, required=False, help='Lr value of model', default=0.00001)
+    args = parser.parse_args()
+
     # check cpu or gpu
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -63,5 +73,8 @@ if __name__ == "__main__":
     net = UNet(n_channels=1, n_classes=1).to(device=device)
     
     # train
-    data_path = "../dataset"
-    train_net(net, device, data_path)
+    data_path = args.dataset
+    epoch = args.epoch
+    batch_size = args.batch_size
+    lr = args.lr
+    train_net(net, device, data_path, epoch, batch_size, lr)
