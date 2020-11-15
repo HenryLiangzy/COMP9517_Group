@@ -15,7 +15,7 @@ def train_net(net, device, data_path, epochs, batch_size, lr):
 
     # define RMSprop/Adam
     optimizer = optim.RMSprop(net.parameters(), lr=lr, weight_decay=1e-8, momentum=0.9)
-    # optimizer = optim.toptim.Adam(net.parameters(), lr=0.01)
+    # optimizer = optim.Adam(net.parameters(), lr=0.01)
 
     # define Loss function
     criterion = nn.BCEWithLogitsLoss()
@@ -39,7 +39,6 @@ def train_net(net, device, data_path, epochs, batch_size, lr):
             pred = net(image)
             loss = criterion(pred, label)
 
-
             # backpropagation parameter, Calculate gradients.
             loss.backward()
 
@@ -55,9 +54,14 @@ def train_net(net, device, data_path, epochs, batch_size, lr):
             torch.save(net.state_dict(), 'best_model.pth')
 
 
+def predict(net, device, data_path):
+    
+    pass
+
+
 # Train here
 if __name__ == "__main__":
-    
+
     # user figure
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dataset', type=str, required=True, help='Input dataset path')
@@ -66,11 +70,14 @@ if __name__ == "__main__":
     parser.add_argument('-l', '--lr', type=float, required=False, help='Lr value of model', default=0.00001)
     args = parser.parse_args()
 
+    print('User figure finish')
+
     # check cpu or gpu
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load picture
-    net = UNet(n_channels=1, n_classes=1).to(device=device)
+    net = UNet(n_channels=1, n_classes=1).to(device)
+    print('Model build finished, start training')
     
     # train
     data_path = args.dataset
