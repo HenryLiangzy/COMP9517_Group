@@ -27,11 +27,11 @@ class Data_Loader(torch.utils.data.Dataset):
         label_img = cv2.imread(img_name+'_label.png')
         
         # convert to single channel
-        rgb_img = cv2.cvtColor(rgb_img, cv2.COLOR_BGR2GRAY)
-        label_img = cv2.cvtColor(label_img, cv2.COLOR_BGR2GRAY)
+        rgb_img = cv2.cvtColor(rgb_img, cv2.COLOR_BGR2RGB)
+        label_img = cv2.cvtColor(label_img, cv2.COLOR_BGR2RGB)
 
-        rgb_img = rgb_img.reshape(1, rgb_img.shape[0], rgb_img.shape[1])
-        label_img = label_img.reshape(1, label_img.shape[0], label_img.shape[1])
+        rgb_img = rgb_img.reshape(3, rgb_img.shape[0], rgb_img.shape[1])
+        label_img = label_img.reshape(3, label_img.shape[0], label_img.shape[1])
 
         if label_img.max() > 1:
             label_img = label_img / 255
@@ -49,6 +49,6 @@ if __name__ == "__main__":
     cvppp_dataset = Data_Loader('../dataset/train')
     print('dataset size:', len(cvppp_dataset))
 
-    train_loader = torch.utils.data.DataLoader(dataset=cvppp_dataset, batch_size=2, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(dataset=cvppp_dataset, batch_size=1, shuffle=True)
     for img, label in train_loader:
         print(img.shape)

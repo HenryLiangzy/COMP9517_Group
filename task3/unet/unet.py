@@ -76,7 +76,7 @@ if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load picture
-    net = UNet(n_channels=1, n_classes=1).to(device)
+    net = UNet(n_channels=1, n_classes=18).to(device)
     print('Model build finished, start training')
     
     # train
