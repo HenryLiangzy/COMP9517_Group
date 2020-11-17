@@ -52,7 +52,7 @@ if __name__ == "__main__":
     parse = argparse.ArgumentParser()
     parse.add_argument('-d', '--dataset', type=str, required=True, help='Input predict dataset')
     parse.add_argument('-m', '--model_path', type=str, required=True, help='model path')
-    parse.add_argument('-t', '--type', type=int, required=False, help='Predict type, 0 for gray, 1 for scale', default=0)
+    parse.add_argument('-t', '--predict_type', type=int, required=False, help='Predict type, 0 for gray, 1 for scale', default=0)
     args = parse.parse_args()
 
-    predict(args.model_path, args.dataset_path, args.predict_type)
+    predict(args.model_path, args.dataset, args.predict_type)
