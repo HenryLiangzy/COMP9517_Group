@@ -27,11 +27,11 @@ class Data_Loader(torch.utils.data.Dataset):
         label_img = cv2.imread(img_name+'_label.png')
         
         # convert to single channel
-        rgb_img = cv2.cvtColor(rgb_img, cv2.COLOR_BGR2RGB)
-        label_img = cv2.cvtColor(label_img, cv2.COLOR_BGR2RGB)
+        rgb_img = cv2.cvtColor(rgb_img, cv2.COLOR_BGR2GRAY)
+        label_img = cv2.cvtColor(label_img, cv2.COLOR_BGR2GRAY)
 
-        rgb_img = rgb_img.reshape(3, rgb_img.shape[0], rgb_img.shape[1])
-        label_img = label_img.reshape(3, label_img.shape[0], label_img.shape[1])
+        rgb_img = rgb_img.reshape(1, rgb_img.shape[0], rgb_img.shape[1])
+        label_img = label_img.reshape(1, label_img.shape[0], label_img.shape[1])
 
         if label_img.max() > 1:
             label_img = label_img / 255

@@ -37,5 +37,5 @@ class UNet(nn.Module):
         return logits
 
 if __name__ == '__main__':
-    net = UNet(n_channels=3, n_classes=18)
+    net = UNet(n_channels=3, n_classes=3)
     print(net)
