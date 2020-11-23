@@ -30,6 +30,8 @@ class Data_Loader(torch.utils.data.Dataset):
         rgb_img = cv2.cvtColor(rgb_img, cv2.COLOR_BGR2GRAY)
         label_img = cv2.cvtColor(label_img, cv2.COLOR_BGR2GRAY)
 
+        label_img = cv2.threshold(label_img, 1, 255, cv2.THRESH_BINARY)[1]
+
         rgb_img = rgb_img.reshape(1, rgb_img.shape[0], rgb_img.shape[1])
         label_img = label_img.reshape(1, label_img.shape[0], label_img.shape[1])
 

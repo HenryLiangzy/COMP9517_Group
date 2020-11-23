@@ -17,14 +17,45 @@ def segment(img, mask):
     return img_out
 
 
-def water_shed(img, threshold=50, footprint_shape=(9, 9)):
+def water_shed(img, threshold=50):
     img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
-    ret, img_thres = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY)
+    ret, img_thres = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY|cv2.THRESH_OTSU)
     distance = ndi.distance_transform_edt(img_thres)
 
-    local_maxi = peak_local_max(distance, indices=False, footprint=np.ones(footprint_shape), labels=img_thres)
-    markers = ndi.label(local_maxi)[0]
+    local_maxi = peak_local_max(distance, min_distance=30, indices=False, labels=img_thres)
+    markers = ndi.label(local_maxi, structure=np.ones((3, 3)))[0]
+    labels = watershed(-distance, markers, mask=img_thres)
+
+    return labels
+
+
+def dis_watershed(img, thres_distance=5, threshold=50):
+    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
+    ret, img_thres = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY|cv2.THRESH_OTSU)
+    distance = ndi.distance_transform_edt(img_thres)
+
+    local_maxi = peak_local_max(distance, min_distance=30, indices=False, labels=img_thres)
+
+    peak_list = list()
+    for r in range(local_maxi.shape[0]):
+        for c in range(local_maxi.shape[1]):
+            if local_maxi[r][c] != False:
+                peak_list.append((r, c))
+
+    final_peak = list()
+    for r, c in peak_list:
+        tag = True
+        for peak in final_peak:
+            if abs(peak[0]-r)+abs(peak[1]-c) <= thres_distance:
+                tag = False
+                local_maxi[r][c] = False
+                break
+        if tag:
+            final_peak.append((r, c))
+
+    markers = ndi.label(local_maxi, structure=np.ones((3, 3)))[0]
     labels = watershed(-distance, markers, mask=img_thres)
 
     return labels
@@ -56,10 +87,13 @@ if __name__ == "__main__":
         img_original = cv2.cvtColor(img_original, cv2.COLOR_BGR2RGB)
 
         img_plant = segment(img_original, img_res)
-        label = water_shed(img_plant, threshold=threshold, footprint_shape=shape)
+
+        # two way of segment
+        # label = water_shed(img_plant)
+        label = dis_watershed(img_plant)
 
         # save the label image
-        plt.imsave(image_name+'_ws.png', label, cmap=plt.cm.nipy_spectral, format='png')
+        plt.imsave(image_name+'_ws.png', label, cmap='gray', format='png')
 
         print('Done!')
     

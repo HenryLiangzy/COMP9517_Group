@@ -38,9 +38,8 @@ def predict(model_path, dataset_path, predict_type):
         # predict the image
         pred = net(img_tensor)
 
-        # renormalization 
+        # de-normalization 
         pred = np.array(pred.data.cpu()[0])[0] * 255
-        
         # ret, pred = cv2.threshold(pred, 1, 255, cv2.THRESH_BINARY)
 
         # save file

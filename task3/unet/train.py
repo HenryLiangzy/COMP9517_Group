@@ -14,8 +14,8 @@ def train_net(net, device, data_path, epochs, batch_size, lr):
                                                shuffle=True)
 
     # define RMSprop/Adam
-    optimizer = optim.RMSprop(net.parameters(), lr=lr, weight_decay=1e-8, momentum=0.9)
-    # optimizer = optim.Adam(net.parameters(), lr=0.01)
+    # optimizer = optim.RMSprop(net.parameters(), lr=lr, weight_decay=1e-8, momentum=0.9)
+    optimizer = optim.Adam(net.parameters(), lr=0.01)
 
     # define Loss function
     criterion = nn.BCEWithLogitsLoss()
@@ -46,17 +46,15 @@ def train_net(net, device, data_path, epochs, batch_size, lr):
             optimizer.step()
 
         # show loss after each epoch
-        print('Epoch', epoch, 'Loss:', loss.item())
+        print('Epoch', epoch, 'Loss:', loss.item(), end=' ')
 
         # Save the smallest loss model
         if loss < best_loss:
             best_loss = loss
+            print('Model saved', end='')
             torch.save(net.state_dict(), 'best_model.pth')
 
-
-def predict(net, device, data_path):
-    
-    pass
+        print()
 
 
 # Train here
@@ -76,7 +74,7 @@ if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     # load picture
-    net = UNet(n_channels=1, n_classes=18).to(device)
+    net = UNet(n_channels=1, n_classes=1).to(device=device)
     print('Model build finished, start training')
     
     # train

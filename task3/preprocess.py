@@ -38,23 +38,21 @@ def main(args):
     for file_name in train_list:
         img = cv2.imread(dataset_path+file_name+'_rgb.png')
         img = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
-        cv2.imwrite(output_path+'/'+'train/'+file_name+'_rgb.jpg', img)
+        cv2.imwrite(output_path+'/'+'train/'+file_name+'_rgb.png', img)
 
-        img = cv2.imread(dataset_path+file_name+'_label.png', 0)
-        ret, img = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY)
+        img = cv2.imread(dataset_path+file_name+'_label.png')
         img = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
-        cv2.imwrite(output_path+'/'+'train/'+file_name+'_label.jpg', img)
+        cv2.imwrite(output_path+'/'+'train/'+file_name+'_label.png', img)
         print('Train writing:', file_name)
 
     for file_name in test_list:
         img = cv2.imread(dataset_path+file_name+'_rgb.png')
         img = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
-        cv2.imwrite(output_path+'/'+'test/'+file_name+'_rgb.jpg', img)
+        cv2.imwrite(output_path+'/'+'test/'+file_name+'_rgb.png', img)
 
-        img = cv2.imread(dataset_path+file_name+'_label.png', 0)
-        ret, img = cv2.threshold(img, 1, 255, cv2.THRESH_BINARY)
+        img = cv2.imread(dataset_path+file_name+'_label.png')
         img = cv2.resize(img, (size, size), interpolation=cv2.INTER_AREA)
-        cv2.imwrite(output_path+'/'+'test/'+file_name+'_label.jpg', img)
+        cv2.imwrite(output_path+'/'+'test/'+file_name+'_label.png', img)
         print('Test writing:', file_name)
     
 

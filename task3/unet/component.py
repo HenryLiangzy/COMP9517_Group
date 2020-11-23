@@ -65,6 +65,7 @@ class Up(nn.Module):
 
 
 class FeatureConcat(nn.Module):
+    '''originally plan to seperate concat layer and upsample layer'''
 
     def __init__(self, in_channels, out_channels):
         super().__init__()
